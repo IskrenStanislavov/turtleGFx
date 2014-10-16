@@ -10,7 +10,15 @@
 	window.addEventListener('load', function(){
 		var turtle = new Turtle();
 		console.error(turtle);
+		turtle.penColor("red");
 		turtle.penDown();
+		turtle.move(100);
+		turtle.penColor("#089070");
+		turtle.turn(45);
+		turtle.move(100);
+		turtle.penColor(100, 200, 40);
+		turtle.penSize(3);
+		turtle.turn(45);
 		turtle.move(100);
 		turtle.penUp();
 	}, false );

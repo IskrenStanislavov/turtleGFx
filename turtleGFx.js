@@ -39,7 +39,8 @@ Turtle.prototype.calculateMove = function(distance){
 };
 
 Turtle.prototype.turn = function(degrees){
-	this.orientation += degrees;
+	var radians = degrees * Math.PI / 360;
+	this.orientation += radians;
 };
 
 Turtle.prototype.penDown = function(){
@@ -57,13 +58,28 @@ Turtle.prototype.penUp = function(){
 
 Turtle.prototype.penSize = function(size){
 	this.pen.width = size;
+	this.applyStrokeStyle();
 };
 
-Turtle.prototype.penColor = function(color){
+Turtle.prototype.penColor = function(color, G, B){
+	if (typeof(color)==='string'){// penColor("red"), penColor("#0123456")
+		this.pen.color = color;
+	} else if ( typeof(color) === 'number' 
+				&& typeof(G) === 'number' 
+				&& typeof(B) === 'number'){
+		//penColor(0,23,78)
+		var color = color.toString(16),
+			G = G.toString(16),
+			B = B.toString(16);
+		this.pen.color = '#'+color+G+B;
+
+	} else {
+		throw "unsuported color format";
+	}
 	// HEX
 	// RGB
 	//string; like blue, red, etc.
-	this.pen.color = color;
+	this.applyStrokeStyle();
 };
 
 
