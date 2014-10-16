@@ -1,6 +1,19 @@
 <!DOCTYPE html>
 <html>
+<head>
+	<script type="text/javascript" src="turtleGFx.js"></script>
+</head>
 <body>
 	<canvas id='stage' width="400" height="400"></canvas>
+	<script type="text/javascript">
+	"use strict"
+	window.addEventListener('load', function(){
+		var turtle = new Turtle();
+		console.error(turtle);
+		turtle.penDown();
+		turtle.move(100);
+		turtle.penUp();
+	}, false );
+      	</script>
 </body>
 </html>

@@ -1,3 +1,4 @@
+var Turtle = (function(){
 var Pen = function(){
 	this.color = "black";
 	this.width = 1.0;
@@ -42,13 +43,16 @@ Turtle.prototype.turn = function(degrees){
 };
 
 Turtle.prototype.penDown = function(){
-	// this.pen.down = true;
-	this.pen.setState("down");
+	this.pen.down = true;
+	this.pen.up = !this.pen.down;
+	this.canvasCtx.beginPath();
+    this.canvasCtx.moveTo(this.location.x, this.location.y);
 };
 
 Turtle.prototype.penUp = function(){
-	// this.pen.down = false;
-	this.pen.setState("up");
+	this.pen.up = true;
+	this.pen.down = !this.pen.up;
+	this.canvasCtx.stroke();
 };
 
 Turtle.prototype.penSize = function(size){
@@ -62,3 +66,5 @@ Turtle.prototype.penColor = function(color){
 	this.pen.color = color;
 };
 
+
+return Turtle;})();
