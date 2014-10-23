@@ -82,5 +82,88 @@ Turtle.prototype.penColor = function(color, G, B){
 	this.applyStrokeStyle();
 };
 
+var LindenmayerCurve = function(cfg){
+	this.init(cfg);
+};
 
-return Turtle;})();
+LindenmayerCurve.prototype.init = function(cfg){
+	// this.variables = ["A","B"];
+	// this.constants = [];
+	this.start = cfg.start;
+	this.rules = cfg.rules;
+	// this.rules = {
+	// 	'A': ['A','B'],
+	// 	'B': ['A'],
+	// }
+};
+
+LindenmayerCurve.prototype.getPathN = function(power){
+	if (power === 0){
+		return this.start;
+	}
+	var result = [];
+	// console.log(power, "-=", this.getPathN(power-1));
+	this.getPathN(power-1).forEach(function(elem, ix){
+		// console.log("#$", elem, result, this.rules[elem] || [elem]);
+		result = result.concat(this.rules[elem] || [elem]); //if constant just add it
+		// console.log("#*****$", elem, result);
+	}.bind(this))
+	return result;
+}
+
+//#### test start ####//
+var doTest = function(){
+	var test_c1 = new LindenmayerCurve({
+		'start': ['A'],
+		'rules': {
+			'A': ['A','B','A'],
+			'B': ['A'],
+		}
+	});
+	var testCaseResult=[
+		["A"],
+		["A", "B", "A"],
+		["A", "B", "A", "A", "A", "B", "A"],
+		["A", "B", "A", "A", "A", "B", "A", "A", "B", "A", "A", "B", "A", "A", "A", "B", "A"]
+	];
+	for (var testNum=0;testNum<4;testNum+=1){
+
+		if (test_c1.getPathN(testNum).join('') != testCaseResult[testNum].join('')){
+			throw "test failed", test_c1.getPathN(testNum);
+		} else {
+			console.error('test passed:', testNum);
+		}
+	}
+};
+doTest();
+//#### test end ####//
+
+var HilbertCurve = function(power){
+	// http://en.wikipedia.org/wiki/Hilbert_curve#Representation_as_Lindenmayer_system
+	this.power = power;
+	this.init({
+		'start': ['A'],
+		'rules': {
+			'A': ['−', 'B', 'F', '+', 'A', 'F', 'A', '+', 'F', 'B', '−'],
+			'B': ['+', 'A', 'F', '−', 'B', 'F', 'B', '−', 'F', 'A', '+']
+		}
+	});
+}
+HilbertCurve.prototype = new LindenmayerCurve();
+HilbertCurve.prototype.draw = function(){
+	var path = this.getPathN(this.power);
+	console.log(path.join(''));
+};
+
+// class Hilbert(LindenmayerCurve)
+Turtle.prototype.drawHilbert = function(power){
+	var hilbert = new HilbertCurve(1);
+	hilbert.draw()
+	// for (i = 0;i<3;i+=1){
+	// 	console.log(i, c.getPathN(i));
+	// } 
+	// 0,(new LindenmayerCurve()).getPathN(0)
+}
+
+return Turtle;
+})();
